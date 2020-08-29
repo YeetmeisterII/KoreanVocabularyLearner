@@ -1,0 +1,35 @@
+CREATE TABLE units
+(
+    unit_id INTEGER PRIMARY KEY NOT NULL
+);
+
+CREATE TABLE lessons
+(
+    lesson_id INTEGER PRIMARY KEY NOT NULL,
+    title     TEXT UNIQUE         NOT NULL,
+    unit_id   INTEGER             NOT NULL,
+    CONSTRAINT fk_unit_ids
+        FOREIGN KEY (unit_id) REFERENCES units (unit_id)
+            ON DELETE CASCADE
+);
+
+CREATE TABLE words
+(
+    word_id        INTEGER PRIMARY KEY NOT NULL,
+    english        TEXT                NOT NULL,
+    korean         TEXT                NOT NULL,
+    success_rating INTEGER             NOT NULL CHECK (success_rating >= 0)
+);
+
+CREATE TABLE lesson_word
+(
+    lesson_id INTEGER NOT NULL,
+    word_id   INTEGER NOT NULL,
+    PRIMARY KEY (lesson_id, word_id),
+    CONSTRAINT fk_lesson_id
+        FOREIGN KEY (lesson_id) REFERENCES lessons (lesson_id)
+            ON DELETE CASCADE,
+    CONSTRAINT fk_word_id
+        FOREIGN KEY (word_id) REFERENCES words (word_id)
+            ON DELETE CASCADE
+);
